@@ -8,79 +8,66 @@
 </head>
 
 <body>
-        <input type="range" id ="jasnosc" min="-10" max="10" step=>
-        <input type="range" id ="kontrast" min="-10" max="10">
-        <input type="range" id ="nasycenie" min="-10" max="10">
-        <input type="range" id ="rozmycie" min="-10" max="10">
+    Jaśniej<input type="range" id ="jasnosc" min="-10" max="10" step="1">Ciemniej</br>
+    Kontrast<input type="range" id ="kontrast" min="-10" max="10" step="1">Normalne</br>
+    Żywe kolory<input type="range" id ="nasycenie" min="-10" max="10" step="1">Wyszarzałe</br>
+    Rozmyte<input type="range" id ="rozmycie" min="-10" max="10" step="1">Ostre</br>
 
 
     <input type="file" name="" id="grafika">
-    <button id="run">Pobierz piksele</button>
+    <button id="run">Test</button></br>
     <canvas width="600" height="400" id="plotno">
     
     <script>
         let plik = document.querySelector('#grafika')
         let plotno = document.querySelector('#plotno')
         let btnRun = document.querySelector('#run')
+        let suwakJasnosc = document.querySelector('#jasnosc')
+        
 
         const zdjecie = "./foto.jpg"
-        let ctx = plotno.getContext('2d')  //chcemy dobrac sie do kazdego pikselu w canvasie; tu sobie pobieramy kontekst
-        //musimy miec jakis obiekt, do ktorego wzucimy sciezke ze zdjecia i go wezmiemy
+        let ctx = plotno.getContext('2d')  
 
-        let img = new Image() //nie deklarujemy wysokosci ani nic
+        let img = new Image() 
         img.src = zdjecie
         img.addEventListener('load', (e) => {
             ctx.drawImage(img, 0, 0, plotno.width, plotno.height)
         })
-        //tu teraz rysowanie na vancasie za pomoca kontekstu
-
-        //ctx.drawImage() // nie zadziala tu (img,0 ,0 , plotno.width, ployno.hrigth); mowie ze zrodlo jest w zdjeciu i zaczyna je ladowac - nie zdazy go zaladowac zeby to uzyc; teraz u gory zapisujemy zdarzenie load - zeby zaladowalo zdjecie
-        //plik.addEventListener('change', (e) => {
-          //  console.log(e)   srednie bo to bylo wrzucanie na serwer
-        //})
-
-        //chcemy zmieniac jasnosc pikseli, wiec bedziemy dodac wartosc do RGB - zeby sciemnic, odejmujemy
-
-        //przy kontrakscie, ciemne sciemniamy bardziej, jasne rozjasniamy, 
-
-        // nasycenie - wziac wartosc najwyzsza RGB - 170 80 90 i ja jeszcze bardziej podwyzszyc i tylko ja ruszamy; ewentualnie kazda stopniowo - 170 bardziej, 90 srednio a 80 najmniej 
-
-        //rozmycie wziac piksele obok np 10 i robic z nich srednia - i jaki obszar biezemy pod uwage, tzw radius (np 10 pikseli albo co 2)
-
-        //ponizej dobranie sie do pikseli
+//do testów
         btnRun.addEventListener('click', (e) => {
             let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
             console.log(imageData)
 
             for(let i=0; i<imageData.data.length; i+=4){
-                imageData.data[i] = Math.min(255, imageData.data[i] + 30) //pierwszy piksel, i wartosc R z RGB, dajemy maxa przez matha; od dolu to max, od gory to min
+                imageData.data[i] = Math.min(255, imageData.data[i] + 30) 
                 imageData.data[i+1] = Math.min(255, imageData.data[i+1] + 30) 
-                imageData.data[i+2] = Math.min(255, imageData.data[i+2] + 30) //trzeba wrzucic zpowrotem do canvasa
+                imageData.data[i+2] = Math.min(255, imageData.data[i+2] + 30) 
             }
             ctx.putImageData(imageData, 0, 0)
         })
 
-// z diva mozna zrobic toucha zeby nie musiec klikac za kazdym razem
+        suwakJasnosc.addEventListener("input", function() {
+            let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
+            console.log(imageData)
+            if (jasnosc.value > 0){
 
-function zmianaKontrastu() {
-    var x = document.querySelector("jasnosc").value;
-    //document.querySelector("demo").innerHTML = x; tu do zmiany zeby zmieniac w RGB
-}
-
-function zmianaJasnosci() {
-    var x = document.querySelector("kontrast").value;
-    //document.querySelector("demo").innerHTML = x;
-}
-
-function zmianaNasycenia() {
-    var x = document.querySelector("nasycenie").value;
-    //document.querySelector("demo").innerHTML = x;
-}
-
-function zmianaRozmycia() {
-    var x = document.querySelector("rozmycie").value;
-    //document.querySelector("demo").innerHTML = x;
-}
+            for(let i=0; i<imageData.data.length; i+=4){
+                imageData.data[i] = Math.min(255, imageData.data[i] + 10) 
+                imageData.data[i+1] = Math.min(255, imageData.data[i+1] + 10) 
+                imageData.data[i+2] = Math.min(255, imageData.data[i+2] + 10) 
+            }
+            ctx.putImageData(imageData, 0, 0) 
+            }
+            else {
+                for(let i=0; i<imageData.data.length; i+=4){
+                imageData.data[i] = Math.min(255, imageData.data[i] - 10) 
+                imageData.data[i+1] = Math.min(255, imageData.data[i+1] - 10) 
+                imageData.data[i+2] = Math.min(255, imageData.data[i+2] - 10) 
+            }
+            ctx.putImageData(imageData, 0, 0) 
+            }
+            })
+        
 
     </script>
     
