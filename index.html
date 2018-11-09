@@ -8,8 +8,8 @@
 </head>
 
 <body>
-    Jaśniej<input type="range" id ="jasnosc" min="-10" max="10" step="1">Ciemniej</br>
-    Kontrast<input type="range" id ="kontrast" min="-10" max="10" step="1">Normalne</br>
+    Jaśniej<input type="range" id ="jasnosc" min="-10" max="10" step="1" >Ciemniej</br>
+    Kontrast<input type="range" id ="kontrast" min="-10" max="10" step="1" value="10">Normalne</br>
     Żywe kolory<input type="range" id ="nasycenie" min="-10" max="10" step="1">Wyszarzałe</br>
     Rozmyte<input type="range" id ="rozmycie" min="-10" max="10" step="1">Ostre</br>
 
@@ -23,6 +23,9 @@
         let plotno = document.querySelector('#plotno')
         let btnRun = document.querySelector('#run')
         let suwakJasnosc = document.querySelector('#jasnosc')
+        let suwakKontrast = document.querySelector('#kontrast')
+        let suwakNasycenie = document.querySelector('#nasycenie')
+        let suwakRozmycie = document.querySelector('#rozmycie')
         
 
         const zdjecie = "./foto.jpg"
@@ -37,19 +40,21 @@
         btnRun.addEventListener('click', (e) => {
             let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
             console.log(imageData)
-
+            
             for(let i=0; i<imageData.data.length; i+=4){
-                imageData.data[i] = Math.min(255, imageData.data[i] + 30) 
-                imageData.data[i+1] = Math.min(255, imageData.data[i+1] + 30) 
-                imageData.data[i+2] = Math.min(255, imageData.data[i+2] + 30) 
-            }
+
+           let piksel = sredniaWartoscPiksela(imageData, i, plotno.width)
+                imageData.data[i] = piksel[0] 
+                imageData.data[i+1] = piksel[1] 
+                imageData.data[i+2] = piksel[2] 
+           }
             ctx.putImageData(imageData, 0, 0)
         })
 
         suwakJasnosc.addEventListener("input", function() {
             let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
             console.log(imageData)
-            if (jasnosc.value > 0){
+            if (jasnosc.value < 0){
 
             for(let i=0; i<imageData.data.length; i+=4){
                 imageData.data[i] = Math.min(255, imageData.data[i] + 10) 
@@ -67,6 +72,115 @@
             ctx.putImageData(imageData, 0, 0) 
             }
             })
+
+            suwakKontrast.addEventListener("input", function() {
+            let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
+            console.log(imageData)
+            if (kontrast.value < 10){
+
+            for(let i=0; i<imageData.data.length; i+=4){
+            if (imageData.data[i] < 150) {
+                imageData.data[i] -= 5;
+            }
+            else {
+                imageData.data[i] += 5;
+            }
+            if (imageData.data[i+1] < 150) {
+                imageData.data[i+1] -= 5;
+            }
+            else {
+                imageData.data[i+1] += 5;
+            }
+            if (imageData.data[i+2] < 150) {
+                imageData.data[i+2] -= 5;
+            }
+            else{ 
+                imageData.data[i+2] += 5;
+            }
+            }
+            ctx.putImageData(imageData, 0, 0)
+        }})
+
+            suwakNasycenie.addEventListener("input", function() {
+                let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
+            console.log(imageData)
+            if (nasycenie.value > 0){
+            for(let i=0; i<imageData.data.length; i+=4){
+            if ((imageData.data[i] >= imageData.data[i+1]) && (imageData.data[i] >= imageData.data[i+2])){
+                imageData.data[i] +=3;
+            }
+            else if ((imageData.data[i+1] >= imageData.data[i]) && (imageData.data[i+1] >= imageData.data[i+2])){
+                imageData.data[i+1] +=3;
+            }
+            else {
+                imageData.data[i+2] +=3;
+            }
+            }}
+
+            else {
+                for(let i=0; i<imageData.data.length; i+=4){
+            if ((imageData.data[i] >= imageData.data[i+1]) && (imageData.data[i] >= imageData.data[i+2])){
+                imageData.data[i] -=3;
+            }
+            else if ((imageData.data[i+1] >= imageData.data[i]) && (imageData.data[i+1] >= imageData.data[i+2])){
+                imageData.data[i+1] -=3;
+            }
+            else {
+                imageData.data[i+2] -=3;
+            }
+            }
+
+            }
+            ctx.putImageData(imageData, 0, 0)
+        })
+            
+
+            suwakRozmycie.addEventListener("input", function() {
+            let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
+            console.log(imageData)
+            if (rozmycie.value < 0){
+
+            for(let i=0; i<imageData.data.length; i+=4){
+                imageData.data[i] = Math.min(255, imageData.data[i] + 10) 
+                imageData.data[i+1] = Math.min(255, imageData.data[i+1] + 10) 
+                imageData.data[i+2] = Math.min(255, imageData.data[i+2] + 10) 
+            }
+            ctx.putImageData(imageData, 0, 0) 
+            }
+            else {
+                for(let i=0; i<imageData.data.length; i+=4){
+                imageData.data[i] = Math.min(255, imageData.data[i] - 10) 
+                imageData.data[i+1] = Math.min(255, imageData.data[i+1] - 10) 
+                imageData.data[i+2] = Math.min(255, imageData.data[i+2] - 10) 
+            }
+            ctx.putImageData(imageData, 0, 0) 
+            }
+            })
+
+            function sredniaWartoscPiksela(imageData, pozycjaPoczatkowa, szerokoscObrazu){
+
+                let red = imageData.data[pozycjaPoczatkowa];
+                let green = imageData.data[pozycjaPoczatkowa+1]
+                let blue = imageData.data[pozycjaPoczatkowa+2]
+
+
+                let prawyPiksel = pozycjaPoczatkowa + 4
+                let lewyPiksel = pozycjaPoczatkowa - 4
+                let gornyPiksel = pozycjaPoczatkowa - (4* szerokoscObrazu)
+                let dolnyPiksel = pozycjaPoczatkowa + (4* szerokoscObrazu)
+
+                if ((pozycjaPoczatkowa % (4*szerokoscObrazu)== 0) || (pozycjaPoczatkowa % (4*szerokoscObrazu)== 8) || (pozycjaPoczatkowa < (4*szerokoscObrazu)) || (pozycjaPoczatkowa > (imageData.data.length - (szerokoscObrazu * 4)))) {
+                    return [red, green, blue]
+ 
+                }
+                else {
+                    red = (red + imageData.data[prawyPiksel] + imageData.data[lewyPiksel] + imageData.data[gornyPiksel] + imageData.data[dolnyPiksel]) / 5
+                    green = (green + imageData.data[prawyPiksel+1] + imageData.data[lewyPiksel+1] + imageData.data[gornyPiksel+1] + imageData.data[dolnyPiksel+1]) / 5
+                    blue = (blue + imageData.data[prawyPiksel+2] + imageData.data[lewyPiksel+2] + imageData.data[gornyPiksel+2] + imageData.data[dolnyPiksel+2]) / 5
+                    return [red, green, blue]
+                }
+
+            }
         
 
     </script>
