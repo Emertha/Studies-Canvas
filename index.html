@@ -4,51 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Title of the document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Projekt: Canva</title>
 </head>
 
-<body>
-    Jaśniej<input type="range" id ="jasnosc" min="-10" max="10" step="1" >Ciemniej</br>
-    Kontrast<input type="range" id ="kontrast" min="-10" max="10" step="1" value="10">Normalne</br>
-    Żywe kolory<input type="range" id ="nasycenie" min="-10" max="10" step="1">Wyszarzałe</br>
-    Rozmyte<input type="range" id ="rozmycie" min="-10" max="10" step="1">Ostre</br>
+<body class="content">
+    <div class="changeTitle"> Poznaj canvas! </div>
+    Jasność<input type="range" id ="jasnosc" min="-10" max="10" step="1" ></br>
+    Kontrast<input type="range" id ="kontrast" min="-10" max="10" step="1" value="10" ></br>
+    Żywe kolory<input type="range" id ="nasycenie" min="-10" max="10" step="1"></br>
+    Rozmycie<input type="range" id ="rozmycie" min="-10" max="10" step="1" ></br>
 
 
-    <input type="file" name="" id="grafika">
-    <button id="run">Test</button></br>
+    
+    <button id="run" class="choosePic">Zdjęcie nr 1</button>
+    <button id="run2" class="choosePic">Zdjęcie nr 2</button>
+    <button id="run3" class="choosePic">Zdjęcie nr 3</button></br></br></br>
     <canvas width="600" height="400" id="plotno">
     
     <script>
         let plik = document.querySelector('#grafika')
         let plotno = document.querySelector('#plotno')
         let btnRun = document.querySelector('#run')
+        let btnRun2 = document.querySelector('#run2')
+        let btnRun3 = document.querySelector('#run3')
         let suwakJasnosc = document.querySelector('#jasnosc')
         let suwakKontrast = document.querySelector('#kontrast')
         let suwakNasycenie = document.querySelector('#nasycenie')
         let suwakRozmycie = document.querySelector('#rozmycie')
         
 
-        const zdjecie = "./foto.jpg"
+        const zdjecie = "./foto1.jpg"
+        const zdjecie2 = "./foto.jpg"
+        const zdjecie3 = "./foto2.jpg"
         let ctx = plotno.getContext('2d')  
 
-        let img = new Image() 
+        
+        
+//do testów
+        btnRun.addEventListener('click', (e) => {
+            let img = new Image() 
         img.src = zdjecie
         img.addEventListener('load', (e) => {
             ctx.drawImage(img, 0, 0, plotno.width, plotno.height)
         })
-//do testów
-        btnRun.addEventListener('click', (e) => {
-            let imageData = ctx.getImageData(0, 0, plotno.width, plotno.height)
-            console.log(imageData)
-            
-            for(let i=0; i<imageData.data.length; i+=4){
-
-           let piksel = sredniaWartoscPiksela(imageData, i, plotno.width)
-                imageData.data[i] = piksel[0] 
-                imageData.data[i+1] = piksel[1] 
-                imageData.data[i+2] = piksel[2] 
-           }
-            ctx.putImageData(imageData, 0, 0)
+        })
+        btnRun2.addEventListener('click', (e) => {
+            let img2 = new Image() 
+        img2.src = zdjecie2
+        img2.addEventListener('load', (e) => {
+            ctx.drawImage(img2, 0, 0, plotno.width, plotno.height)
+        })
+        })
+        btnRun3.addEventListener('click', (e) => {
+            let img3 = new Image() 
+        img3.src = zdjecie3
+        img3.addEventListener('load', (e) => {
+            ctx.drawImage(img3, 0, 0, plotno.width, plotno.height)
+        })
         })
 
         suwakJasnosc.addEventListener("input", function() {
@@ -164,8 +177,8 @@
                 let blue = imageData.data[pozycjaPoczatkowa+2]
 
 
-                let prawyPiksel = pozycjaPoczatkowa + 4
-                let lewyPiksel = pozycjaPoczatkowa - 4
+                let prawyPiksel = pozycjaPoczatkowa + 4;
+                let lewyPiksel = pozycjaPoczatkowa - 4;
                 let gornyPiksel = pozycjaPoczatkowa - (4* szerokoscObrazu)
                 let dolnyPiksel = pozycjaPoczatkowa + (4* szerokoscObrazu)
 
