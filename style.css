@@ -1,0 +1,48 @@
+.changeTitle {
+    
+    width: 50%;
+	margin: auto;
+    font: 50px Sans-Serif;
+    letter-spacing: -5px;
+    padding: 30px;
+	color: rgba(0,0,255,0.5); 
+}
+.content {
+  max-width: 600px;
+  margin: auto;
+  background: #6190e8; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #6190e8, #a7bfe8); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #6190e8, #a7bfe8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+
+.choosePic {
+    color: #fff;
+    text-transform: uppercase;
+    background: #618ed3;
+    padding: 15px;
+    border-radius: 60px;
+    display: inline-block;
+    border: none;
+    }
+
+.choosePic:hover {
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.233);
+    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    transition: all 0.7s ease 0.3s;
+        }
+
+input[type=range]{
+    
+        -webkit-appearance: none;
+        width: 100%;
+        height: 10px;
+        border-radius: 2px;
+        background: #d7dcdf;
+        outline: none;
+        padding: 0;
+        margin: 0;
+      
+        }
